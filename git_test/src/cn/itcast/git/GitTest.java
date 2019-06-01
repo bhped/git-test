@@ -11,5 +11,6 @@ public class GitTest {
 
     public void testclone(){
         System.out.println("克隆后更改");
+        System.out.println("克隆后更改");
     }
 }
