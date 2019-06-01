@@ -11,5 +11,8 @@ public class GitTest {
         System.out.println("clone后原工程增加内容");
     }
 
-
+    public void testclone(){
+        System.out.println("克隆后更改");
+        System.out.println("克隆后更改");
+    }
 }
