@@ -9,6 +9,7 @@ public class GitTest {
         System.out.println("增加内容");
         System.out.println("clone后原工程增加内容");
         System.out.println("clone后原工程增加内容");
+        System.out.println("clone后原工程增加内容");
     }
 
     public void testclone(){
