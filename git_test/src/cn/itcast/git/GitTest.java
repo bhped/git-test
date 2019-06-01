@@ -8,4 +8,8 @@ public class GitTest {
     public void test(){
         System.out.println("增加内容");
     }
+
+    public void testclone(){
+        System.out.println("克隆后更改");
+    }
 }
