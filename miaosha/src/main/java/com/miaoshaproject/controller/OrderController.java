@@ -29,13 +29,14 @@ public class OrderController extends BaseController {
     @ResponseBody
     public CommonReturnType createOrder(@RequestParam(name = "userId") Integer userId,
                                         @RequestParam(name = "itemId") Integer itemId,
+                                        @RequestParam(name = "promoId") Integer promoId,
                                         @RequestParam(name = "amount")Integer amount) throws BusinessException {
 //        Boolean isLogin = (Boolean) httpServletRequest.getSession().getAttribute("IS_LOGIN");
 //        if (isLogin == null || !isLogin.booleanValue()) {
 //            throw new BusinessException(EmBusinessError.USER_NOT_LOGIN, "用户还未登录，不能下单");
 //        }
 //        UserModel userModel = (UserModel) httpServletRequest.getSession().getAttribute("LOGIN_USER");
-        OrderModel orderModel = orderService.createOrder(userId, itemId, amount);
+        OrderModel orderModel = orderService.createOrder(userId, itemId, promoId, amount);
         return CommonReturnType.create(orderModel);
     }
 }

@@ -24,4 +24,7 @@ public class OrderModel {
     //购买金额
     private BigDecimal orderPrice;
 
+    private Integer promoId;
+
+
 }

@@ -6,12 +6,14 @@ import com.miaoshaproject.error.BusinessException;
 import com.miaoshaproject.response.CommonReturnType;
 import com.miaoshaproject.service.ItemService;
 import com.miaoshaproject.service.model.ItemModel;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,13 +24,7 @@ public class ItemController extends BaseController {
     @Autowired
     private ItemService itemService;
 
-    @RequestMapping(value = "/get",method = {RequestMethod.GET})
-    @ResponseBody
-    public CommonReturnType getItem(@RequestParam("id") Integer id){
-        ItemModel itemModel = itemService.getItemById(id);
-        ItemVO itemVO = convertFromItemModel(itemModel);
-        return CommonReturnType.create(itemVO);
-    }
+
 
     @RequestMapping(value = "/create",method = {RequestMethod.POST})
     @ResponseBody
@@ -49,6 +45,33 @@ public class ItemController extends BaseController {
         return CommonReturnType.create(itemVO);
     }
 
+
+
+    private ItemVO convertFromItemModel(ItemModel itemModel){
+        ItemVO itemVO = new ItemVO();
+        if (itemModel == null) {
+            return null;
+        }
+        BeanUtils.copyProperties(itemModel,itemVO);
+        if (itemModel.getPromoModel() != null) {
+			itemVO.setPromoStatus(itemModel.getPromoModel().getStatus());
+            itemVO.setPromoId(itemModel.getPromoModel().getId());
+			itemVO.setStartDate(itemModel.getPromoModel().getStartDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")));
+            itemVO.setPromoPrice(itemModel.getPromoModel().getPromoItemPrice());
+            
+            
+        } else {
+            itemVO.setPromoStatus(0);
+        }
+        return itemVO;
+    }
+    @RequestMapping(value = "/get",method = {RequestMethod.GET})
+    @ResponseBody
+    public CommonReturnType getItem(@RequestParam("id") Integer id) throws BusinessException {
+        ItemModel itemModel = itemService.getItemById(id);
+        ItemVO itemVO = convertFromItemModel(itemModel);
+        return CommonReturnType.create(itemVO);
+    }
     @RequestMapping(value = "/list",method = {RequestMethod.GET})
     @ResponseBody
     public CommonReturnType listItem(){
@@ -58,14 +81,5 @@ public class ItemController extends BaseController {
             return itemVO;
         }).collect(Collectors.toList());
         return CommonReturnType.create(itemVOList);
-    }
-
-    private ItemVO convertFromItemModel(ItemModel itemModel){
-        ItemVO itemVO = new ItemVO();
-        if (itemModel == null) {
-            return null;
-        }
-        BeanUtils.copyProperties(itemModel,itemVO);
-        return itemVO;
     }
 }

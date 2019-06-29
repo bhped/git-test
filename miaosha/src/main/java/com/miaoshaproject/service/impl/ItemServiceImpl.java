@@ -2,12 +2,16 @@ package com.miaoshaproject.service.impl;
 
 import com.miaoshaproject.dao.ItemDOMapper;
 import com.miaoshaproject.dao.ItemStockDOMapper;
+import com.miaoshaproject.dao.PromoDOMapper;
 import com.miaoshaproject.dataobject.ItemDO;
 import com.miaoshaproject.dataobject.ItemStockDO;
+import com.miaoshaproject.dataobject.PromoDO;
 import com.miaoshaproject.error.BusinessException;
 import com.miaoshaproject.error.EmBusinessError;
 import com.miaoshaproject.service.ItemService;
+import com.miaoshaproject.service.PromoService;
 import com.miaoshaproject.service.model.ItemModel;
+import com.miaoshaproject.service.model.PromoModel;
 import com.miaoshaproject.validator.ValidationResult;
 import com.miaoshaproject.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +34,8 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private ValidatorImpl validator;
 
+    @Autowired
+    private PromoService promoService;
 
     @Override
     public Boolean decreaseStock(Integer itemId, Integer amount) {
@@ -38,7 +44,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemModel getItemById(Integer id) {
+    public ItemModel getItemById(Integer id) throws BusinessException {
         ItemDO itemDO = itemDOMapper.selectByPrimaryKey(id);
         if (itemDO == null) {
             return null;
@@ -46,6 +52,12 @@ public class ItemServiceImpl implements ItemService {
         ItemModel itemModel = convertFromItemDO(itemDO);
         ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
         itemModel.setStock(itemStockDO.getStock());
+
+        PromoModel promoModel = promoService.getPromoByItemId(itemModel.getId());
+        if (promoModel != null || promoModel.getStatus() != 3) {
+            itemModel.setPromoModel(promoModel);
+        }
+
         return itemModel;
     }
 
@@ -56,6 +68,7 @@ public class ItemServiceImpl implements ItemService {
             ItemModel itemModel = convertFromItemDO(itemDO);
             ItemStockDO itemStockDO = itemStockDOMapper.selectByItemId(itemDO.getId());
             itemModel.setStock(itemStockDO.getStock());
+            itemModel.setPromoModel(null);
             return itemModel;
         }).collect(Collectors.toList());
 

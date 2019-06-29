@@ -1,5 +1,7 @@
 package com.miaoshaproject.controller.viewobject;
 
+import com.miaoshaproject.dataobject.PromoDO;
+
 import java.math.BigDecimal;
 
 public class ItemVO {
@@ -17,6 +19,46 @@ public class ItemVO {
     private Integer sales;
 
     private String imgUrl;
+
+    private Integer promoId;
+
+    private Integer promoStatus;
+
+    private BigDecimal promoPrice;
+
+    private String startDate;
+
+    public Integer getPromoStatus() {
+        return promoStatus;
+    }
+
+    public void setPromoStatus(Integer promoStatus) {
+        this.promoStatus = promoStatus;
+    }
+
+    public BigDecimal getPromoPrice() {
+        return promoPrice;
+    }
+
+    public void setPromoPrice(BigDecimal promoPrice) {
+        this.promoPrice = promoPrice;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public Integer getPromoId() {
+        return promoId;
+    }
+
+    public void setPromoId(Integer promoId) {
+        this.promoId = promoId;
+    }
 
     public Integer getId() {
         return id;
